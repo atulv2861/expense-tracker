@@ -3,7 +3,7 @@ require('dotenv').config({path:"./config/config.env"});
 const express = require('express');
 const cors = require('cors');
 const app = express();
-
+const path = require('path');
 //middleare
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -33,9 +33,14 @@ app.use((err, req, res, next) => {
 });
 
 //test api
-app.get('/', (req, res) => {
-    res.status(201).json({success:true,message: 'API is working'});
-});
+// app.get('/', (req, res) => {
+//     res.status(201).json({success:true,message: 'API is working'});
+// });
 
+app.use(express.static(path.join(__dirname,'../client/build')));
+
+app.get("*",(req,res)=>{
+    res.sendFile(path.resolve(__dirname,'../client/build/index.html'))
+})
 
 module.exports = app;
